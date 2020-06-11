@@ -33,6 +33,7 @@ private:
 public:
     CMatrix(int r, int c);                       // Init with 0
     CMatrix(int r, int c, T *matrix_arr);        // Init with array
+    CMatrix(int r, int c,  std::vector<std::vector<T>> m); //Init with matrix
     CMatrix(const CMatrix<T> &tar);              // Init with CMatrix
     CMatrix(CMatrix<T> *tar);                    // Init with CMatrix pointer
     void print();                                // Print the matrix
@@ -56,6 +57,9 @@ public:
     void tranposition();                   // transposition matrix
     void conjugation();                    // conjugation matrix
     ~CMatrix();
+	void eigen( CMatrix<T>* eigenVector, T* eigenValue, double precision);
+	CMatrix<T> inverse();
+
 };
 
 template <typename T>
@@ -542,8 +546,149 @@ void CMatrix<T>::conjugation()
         matrix.push_back(tmp);
     }
 }
+//jacobi eigenvalue algorithm    该算法只能算对称矩阵！！！
+template <typename T>
+void CMatrix<T>::eigen( CMatrix<T>* eigenVector, T* eigenValue, double precision) {
+	try {
+		if(this->len_c != this->len_r) throw InvalidException();
+
+		CMatrix<T> ma(*this);// copy matrix
+		ma.print();
+		int n = ma.len_c;
+		std::vector<std::vector<T>> *eigenV = &(eigenVector->matrix);
+		for (int i = 0; i < n; i++){
+			for(int j = 0; j < n;j++){
+				if(i==j) (*eigenV)[i][j] = (T)1;
+				else (*eigenV)[i][j] = (T)0;
+			}
+		}
+
+		for(int m = 0; m < 1000000 ; m++) {
+			T max = ma.matrix[0][1];
+			int maxR = 0;
+			int maxC = 1;
+			for (int i = 0; i < n; i++) {
+				for (int j = 0; j < n; j++) {
+					if (i != j && fabs(ma.matrix[i][j]) > max) {
+						maxR = i;
+						maxC = j;
+						max = fabs(ma.matrix[i][j]);
+					}
+				}
+			}
+
+			if (max < precision) break;
+
+			T angle =
+					0.5 * atan2(-2 * ma.matrix[maxR][maxC], ma.matrix[maxC][maxC] - ma.matrix[maxR][maxR]);
+			T sinT = sin(angle);
+			T cosT = cos(angle);
+			T sinT2 = sin(2 * angle);
+			T cosT2 = cos(2 * angle);
+			T Sii = ma.matrix[maxR][maxR];
+			T Sij = ma.matrix[maxR][maxC];
+			T Sjj = ma.matrix[maxC][maxC];
+			ma.matrix[maxR][maxR] = Sii * cosT * cosT + 2 * Sij * sinT * cosT + Sjj * sinT * sinT;
+			ma.matrix[maxC][maxC] = Sii * sinT * sinT - 2 * Sij * sinT * cosT + Sjj * cosT * cosT;
+			ma.matrix[maxR][maxC] = ma.matrix[maxC][maxR] = cosT2 * Sij + 0.5 * sinT2 * (Sjj - Sii);
+
+			for (int i = 0; i < n; i++) {
+				if (i != maxC && i != maxR) {
+					T temp1 = ma.matrix[i][maxC];
+					T temp2 = ma.matrix[i][maxR];
+					ma.matrix[i][maxR] = temp1*sinT + temp2*cosT;
+					ma.matrix[i][maxC] = temp1*cosT - temp2*sinT;
+
+					T temp3 = ma.matrix[maxC][i];
+					T temp4 = ma.matrix[maxR][i];
+					ma.matrix[maxR][i] = temp3*sinT + temp4*cosT;
+					ma.matrix[maxC][i] = temp3*cosT - temp4*sinT;
+				}
+			}
+
+			//eigen vector
+			for(int i = 0; i < n;i++){
+				T temp = (*eigenV)[i][maxR];
+				(*eigenV)[i][maxR] = (*eigenV)[i][maxC]*sinT + temp * cosT;
+				(*eigenV)[i][maxC] = (*eigenV)[i][maxC]*cosT - temp*sinT;
+			}
+			//eigen value
+			for(int i = 0; i < n;i++){
+				T ans = 0;
+				for(int j = 0; j < n;j++){
+					ans+=this->matrix[0][j]*(*eigenV)[j][i];
+				}
+				eigenValue[i] = ans/(*eigenV)[0][i];
+			}
+		}
+	}catch(InvalidException & e){
+		std::cerr<<e.what()<<std::endl;
+	}
+}
+
 template <typename T>
 CMatrix<T>::~CMatrix()
 {
 }
+//use adjoint matrix to get inverse
+template<typename T>
+CMatrix<T> CMatrix<T>::inverse() {
+	try {
+		if(len_r!=len_c) throw InvalidException();
+		int n = len_c;
+		//initialize adjoint matrix
+		T arr[n*n];
+		for(int i = 0; i < n*n;i++){
+			arr[i]=0;
+		}
+		for(int i = 0; i < n;i++){
+			arr[i*n+i]=1;
+		}
+
+		this->print();
+		std::vector<std::vector<T>> copy = matrix;
+		for(int i = 0; i < n;i++){
+			for(int j = i+1; j < n;j++){
+				double t =  copy[j][i]/copy[i][i] ;
+				for(int k = 0; k<n ; k++){
+					copy[j][k] = copy[j][k] - t * copy[i][k];
+					arr[j*n+k] = arr[j*n+k] - t * arr[i*n+k];
+				}
+			}
+		}
+		for(int i = n-1;i>=0;i--){
+			for(int j = i-1 ; j >= 0 ;j--){
+				double t = copy[j][i]/copy[i][i];
+				for(int k = n-1;k>=0;k--){
+					copy[j][k] = copy[j][k] - t * copy[i][k];
+					arr[j*n+k] = arr[j*n+k] - t * arr[i*n+k];
+				}
+			}
+		}
+		for(int i = 0; i < n;i++){
+			double t = copy[i][i];
+			for(int j = 0; j < n;j++){
+				arr[i*n+j]/=t;
+				copy[i][j]/=t;
+			}
+		}
+		CMatrix<T> inverseMatrix(n,n,arr);
+		return inverseMatrix;
+	}catch(InvalidException & e){
+		std::cerr<<e.what()<<std::endl;
+	}
+}
+
+template<typename T>
+CMatrix<T>::CMatrix(int r, int c,  std::vector<std::vector<T>> m){
+	try {
+		if(r<=0||c<=0) throw LessThanZeroException();
+		len_r = r;
+		len_c = c;
+		matrix = m;
+	}catch(LessThanZeroException & e){
+		std::cerr<<e.what()<<std::endl;
+	}
+}
+
 #endif
