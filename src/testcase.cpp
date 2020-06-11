@@ -107,6 +107,38 @@ void testMatrixDet()
     CMatrix<double> test2(4,4,arr2);
     cout << det(test2) << endl;
 }
+void testMatrixEigen(){
+	//testcase1
+	/*double a[16] = { 4, -30, 60, -35,-30, 300, -675, 420,60, -675, 1620, -1050, -35, 420, -1050, 700};
+	CMatrix<double> test2(4,4,a);
+	CMatrix<double> eigenVector(4,4);
+	double eigenValue[4] = {0};
+	test2.eigen(&eigenVector,&eigenValue[0],1e-10);
+	eigenVector.print();
+	cout<<endl;
+	for(int i = 0; i <4;i++){
+		cout<<eigenValue[i]<<" ";
+	}
+	cout<<endl;*/
+	//testcase2
+	double b[9] = { 1.23,2.12,-4.2,2.12,-5.6,8.79,-4.2,8.79,7.3};
+	CMatrix<double> test3(3,3,b);
+	CMatrix<double> eigenVector(3,3);
+	double eigenValue[3] = {0};
+	test3.eigen(&eigenVector,&eigenValue[0],1e-10);
+	eigenVector.print();
+	cout<<endl;
+	for(int i = 0; i <3;i++){
+		cout<<eigenValue[i]<<" ";
+	}
+	cout<<endl;
+}
+void textMatrixInverse(){
+	double b[9] = {1,2,3,2,2,1,3,4,3};
+	CMatrix<double> test3(3,3,b);
+	CMatrix<double> inverse = test3.inverse();
+	inverse.print();
+}
 void testMatrix()
 {
     // testMatrixAddSub();
@@ -118,7 +150,9 @@ void testMatrix()
     // testMatrixVector();
     // testMatrixMaxMinSum();
     // testMatrixAvg();
-    testMatrixDet();
+    //testMatrixDet();
+    //testMatrixEigen();
+	//textMatrixInverse();
 }
 
 int main()
