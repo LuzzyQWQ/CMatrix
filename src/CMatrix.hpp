@@ -59,7 +59,9 @@ public:
     ~CMatrix();
 	void eigen( CMatrix<T>* eigenVector, T* eigenValue, double precision);
 	CMatrix<T> inverse();
-
+	CMatrix<T> reshape(int r, int c);
+	CMatrix<T> slice(int r_start, int r_end, int c_start,int c_end);
+	CMatrix<T> convolution(CMatrix<T> kernal);
 };
 
 template <typename T>
@@ -553,7 +555,6 @@ void CMatrix<T>::eigen( CMatrix<T>* eigenVector, T* eigenValue, double precision
 		if(this->len_c != this->len_r) throw InvalidException();
 
 		CMatrix<T> ma(*this);// copy matrix
-		ma.print();
 		int n = ma.len_c;
 		std::vector<std::vector<T>> *eigenV = &(eigenVector->matrix);
 		for (int i = 0; i < n; i++){
@@ -689,6 +690,95 @@ CMatrix<T>::CMatrix(int r, int c,  std::vector<std::vector<T>> m){
 	}catch(LessThanZeroException & e){
 		std::cerr<<e.what()<<std::endl;
 	}
+}
+
+template<typename T>
+CMatrix<T> CMatrix<T>::reshape(int r, int c) {
+	try {
+		if(r*c!=len_r*len_c) throw InvalidException();
+
+		int l = len_r*len_c;
+		T arr[l];
+		for(int i = 0; i < len_r;i++){
+			for(int j = 0; j < len_c;j++){
+				arr[i*len_c+j] = matrix[i][j];
+			}
+		}
+		return CMatrix<T>(r,c,arr);
+	}catch(InvalidException & e){
+		std::cerr<<e.what()<<std::endl;
+	}
+}
+
+template<typename T>
+CMatrix<T> CMatrix<T>::slice(int r_start, int r_end, int c_start,int c_end) {
+	try {
+		if(r_end>=len_r || c_end >= len_c || r_start<0 || c_start <0) throw InvalidException();
+
+		int r = r_end - r_start + 1;
+		int c = c_end - c_start + 1;
+		T arr[r*c];
+		int m = 0;
+		for(int i = r_start; i <= r_end;i++){
+			for(int j = c_start; j <= c_end;j++){
+				arr[m] = matrix[i][j];
+				m++;
+			}
+		}
+		for(int i = 0; i < r*c;i++)std::cout<< arr[i] <<" ";
+		std::cout<<std::endl;
+		return CMatrix<T>(r,c,arr);
+	}catch(InvalidException & e){
+		std::cerr<<e.what()<<std::endl;
+	}
+}
+
+template<typename T>
+CMatrix<T> CMatrix<T>::convolution(CMatrix<T> kernal) {
+	try{
+		int rkernal = kernal.len_r;
+		int ckernal = kernal.len_c;
+		int rmat = this->len_r+2*(rkernal-1);
+		int cmat = this->len_c+2*(rkernal-1);
+		int rans = rmat-rkernal+1;
+		int cans = cmat-ckernal+1;
+		T ans[rans*cans];
+		std::vector<std::vector<T>> m; // pad 0 to the original mat
+		for (int i = 0; i < rmat; i++)
+		{
+			std::vector<T> tmp;
+			for (int j = 0; j < cmat; j++)
+			{
+				tmp.push_back(0);
+			}
+			m.push_back(tmp);
+		}
+		for(int i = 0;i < this->len_r;i++){
+			for (int j = 0; j < this->len_c; j++)
+			{
+				m[i+rkernal-1][j+ckernal-1] = this->matrix[i][j];
+			}
+		}
+
+		T t;
+		for(int i = 0; i < rans;i++){
+			for(int j = 0; j < cans;j++){
+				t = 0;
+				for(int k = 0; k < rkernal;k++){
+					for(int n = 0; n < ckernal;n++){
+						t += m[k+i][n+j] * kernal.matrix[rkernal-1-k][ckernal-1-n]; // to save to rotation
+					}
+				}
+				ans[i*cans+j] = t;
+			}
+		}
+
+		return CMatrix<T>(rans,cans,ans);
+
+	}catch(InvalidException & e){
+		std::cerr<<e.what()<<std::endl;
+	}
+
 }
 
 #endif
