@@ -109,36 +109,63 @@ void testMatrixDet()
 }
 void testMatrixEigen(){
 	//testcase1
-	/*double a[16] = { 4, -30, 60, -35,-30, 300, -675, 420,60, -675, 1620, -1050, -35, 420, -1050, 700};
+	double a[16] = { 4, -30, 60, -35,-30, 300, -675, 420,60, -675, 1620, -1050, -35, 420, -1050, 700};
 	CMatrix<double> test2(4,4,a);
 	CMatrix<double> eigenVector(4,4);
 	double eigenValue[4] = {0};
 	test2.eigen(&eigenVector,&eigenValue[0],1e-10);
+	test2.print();
 	eigenVector.print();
 	cout<<endl;
 	for(int i = 0; i <4;i++){
 		cout<<eigenValue[i]<<" ";
 	}
-	cout<<endl;*/
+	cout<<endl;
 	//testcase2
-	double b[9] = { 1.23,2.12,-4.2,2.12,-5.6,8.79,-4.2,8.79,7.3};
+	/*double b[9] = { 1.23,2.12,-4.2,2.12,-5.6,8.79,-4.2,8.79,7.3};
 	CMatrix<double> test3(3,3,b);
 	CMatrix<double> eigenVector(3,3);
 	double eigenValue[3] = {0};
 	test3.eigen(&eigenVector,&eigenValue[0],1e-10);
+	 test3.print();
 	eigenVector.print();
 	cout<<endl;
 	for(int i = 0; i <3;i++){
 		cout<<eigenValue[i]<<" ";
 	}
-	cout<<endl;
+	cout<<endl;*/
 }
-void textMatrixInverse(){
+void testMatrixInverse(){
 	double b[9] = {1,2,3,2,2,1,3,4,3};
 	CMatrix<double> test3(3,3,b);
 	CMatrix<double> inverse = test3.inverse();
 	inverse.print();
 }
+
+void testMatrixReshape(){
+	test1.print();
+	CMatrix<double> test2 = test1.reshape(1,9);
+	test2.print();
+}
+
+void testMatrixSlice(){
+	test1.print();
+	CMatrix<double> test2 = test1.slice(0,2,1,2);
+	test2.print();
+}
+
+void testMatrixConvolution(){
+	double pic[12] = {1,2,3,4,5,6,7,8,9,8,7,6};
+	double ker[9] = {1,2,3,-1,0,1,2,1,2};
+	CMatrix<double> picture(3,4,pic);
+	CMatrix<double> kernal(3,3,ker);
+	picture.print();
+	kernal.print();
+	CMatrix<double> ans = picture.convolution(kernal);
+	ans.print();
+
+}
+
 void testMatrix()
 {
     // testMatrixAddSub();
@@ -151,8 +178,11 @@ void testMatrix()
     // testMatrixMaxMinSum();
     // testMatrixAvg();
     //testMatrixDet();
-    //testMatrixEigen();
-	//textMatrixInverse();
+    testMatrixEigen();
+	//testMatrixInverse();
+	//testMatrixReshape();
+	//testMatrixSlice();
+	//testMatrixConvolution();
 }
 
 int main()
