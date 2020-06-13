@@ -784,8 +784,11 @@ CMatrix<T> CMatrix<T>::convolution(CMatrix<T> kernal) {
 template <typename T>
 int CMatrix<T>::eigenvalues_vectors()
 {
-    if(len_r != len_c)
+    if(len_r != len_c){
+        std::cout<<"please make sure the r of matrx and c are same."<<std::endl;
         return 0;
+    }
+
     if(len_r==2){
         double a=1,b=0,c=0;
         c = matrix[0][0]*matrix[1][1] - matrix[1][0]*matrix[0][1];
@@ -837,20 +840,37 @@ int CMatrix<T>::eigenvalues_vectors()
         q = (27*d-9*b*c+2*b*b*b)/27;
         std::complex <double> delta = q*q/4 + p*p*p/27;
         std::complex <double> w = sqrt(-3.0);
-        std::complex <double> eigenvalue_1 = pow(-q/2+sqrt(delta),1.0/3)+pow(-q/2-sqrt(delta),1.0/3)- b/3;  //value of first eigenvalues
-        std::complex <double> eigenvalue_2 = w*pow(-q/2+sqrt(delta),1/3)+(w*w)*pow(-q/2-sqrt(delta),1/3)- b/3;  //value of second eigenvalues
-        std::complex <double> eigenvalue_3 = w*w*pow(-q/2+sqrt(delta),1/3)+w*pow(-q/2-sqrt(delta),1/3)- b/3; //value of third eigenvalues
-        std::cout<<eigenvalue_1<<std::endl;
-        std::cout<<eigenvalue_2<<std::endl;
-        std::cout<<eigenvalue_3<<std::endl;
-        std::cout<<b<<" "<<p<<" "<<q<<" "<<delta<<" "<<w*w<<std::endl;
-    } 
-    if(len_r==4){
-        int a=1,b,c,d,e=0;
-
+        std::complex <double> eigenvalues_1 = pow(-q/2+sqrt(delta),1.0/3)+pow(-q/2-sqrt(delta),1.0/3)- b/3;  //value of first eigenvalues
+        std::complex <double> eigenvalues_2 = w*pow(-q/2+sqrt(delta),1/3)+(w*w)*pow(-q/2-sqrt(delta),1/3)- b/3;  //value of second eigenvalues
+        std::complex <double> eigenvalues_3 = w*w*pow(-q/2+sqrt(delta),1/3)+w*pow(-q/2-sqrt(delta),1/3)- b/3; //value of third eigenvalues
+        // std::cout<<eigenvalue_1<<std::endl;
+        // std::cout<<eigenvalue_2<<std::endl;
+        // std::cout<<eigenvalue_3<<std::endl;
+        // std::cout<<b<<" "<<p<<" "<<q<<" "<<delta<<" "<<w*w<<std::endl;
         
+        std::complex <double> new_matrix[3][3];
+        //value of first eigenvector
+        for (int i = 0; i < 3; i++)
+            for (int j = 0; j < 3; j++)
+                new_matrix[i][j]=-matrix[i][j]; //xE - A
+        new_matrix[0][0] += eigenvalues_1;
+        new_matrix[1][1] += eigenvalues_1;
+        new_matrix[2][2] += eigenvalues_1;
+        std::complex <double> eigenvector_1[3]={1,0,0};
+        eigenvector_1[1]=(new_matrix[1][0]*new_matrix[0][2]-new_matrix[0][0]*new_matrix[1][2]);
+        eigenvector_1[1]/=(new_matrix[0][1]*new_matrix[1][2]-new_matrix[0][2]*new_matrix[1][1]);
+        eigenvector_1[2]=(new_matrix[0][0]*new_matrix[1][1]-new_matrix[0][1]*new_matrix[1][0]);
+        eigenvector_1[2]/=(new_matrix[0][1]*new_matrix[1][2]-new_matrix[0][2]*new_matrix[1][1]);
+        std::cout<<"First eigenvalue is: "<<eigenvalues_1.real()<<"+("<<eigenvalues_1.imag()<<"i)"<<std::endl;
+        std::cout<<"First eigenvector is: "<<std::endl<<eigenvector_1[0].real()<<"+("<<eigenvector_1[0].imag()<<"i)"<<std::endl;
+        std::cout<<eigenvector_1[1].real()<<"+("<<eigenvector_1[1].imag()<<"i)"<<std::endl;
+        std::cout<<eigenvector_1[2].real()<<"+("<<eigenvector_1[2].imag()<<"i)"<<std::endl;
+        return 3;
+    } 
+    if(len_r>4){
+       std::cout<<"Hard to compute"<<std::endl;
+       return 0;
     }
-
     return 0;
 }
 #endif

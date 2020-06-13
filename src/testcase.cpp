@@ -166,6 +166,21 @@ void testMatrixConvolution(){
 
 }
 
+void testeigenvalues_vectors()
+{
+    double arr1[9] = {1,-2,1,2};
+    double arr2[9] = {4, 2, -5, 6, 4, -9, 5, 3, -7};
+    //double arr3[9] = {-1, 1, 0, -4, 3, 0, 1, 0, 2};
+    double arr3[9] = {1, 2, 3, 2, 1, 3, 3, 3, 6};
+    CMatrix<double> test1(2, 2, arr1);
+    CMatrix<double> test2(3, 3, arr2);
+    CMatrix<double> test3(3, 3, arr3);
+    test2.print();
+    test2.eigenvalues_vectors();
+    test1.print();
+    test1.eigenvalues_vectors();
+}
+
 void testMatrix()
 {
     // testMatrixAddSub();
@@ -178,11 +193,12 @@ void testMatrix()
     // testMatrixMaxMinSum();
     // testMatrixAvg();
     //testMatrixDet();
-    testMatrixEigen();
+    // testMatrixEigen();
 	//testMatrixInverse();
 	//testMatrixReshape();
 	//testMatrixSlice();
 	//testMatrixConvolution();
+    testeigenvalues_vectors();
 }
 
 int main()
