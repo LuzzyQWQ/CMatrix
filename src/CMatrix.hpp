@@ -790,17 +790,19 @@ int CMatrix<T>::eigenvalues_vectors()
         double a=1,b=0,c=0;
         c = matrix[0][0]*matrix[1][1] - matrix[1][0]*matrix[0][1];
         b = - matrix[0][0] - matrix[1][1];
-        double eigenvalues_1 = (-b + sqrt(b*b-4*a*c))/2/a;  //value of first eigenvalues
-        double eigenvalues_2 = (-b - sqrt(b*b-4*a*c))/2/a;  //value of second eigenvalues
-        std::cout<<eigenvalues_1<<" "<<eigenvalues_2<<" "<<std::endl;
-        int new_matrix[2][2];
+        auto delta = std::complex<double>(b*b-4*a*c,0);
+        std::complex <double> eigenvalues_1 = -b+sqrt(delta);  //value of first eigenvalues
+        eigenvalues_1 /= 2;
+        std::complex <double> eigenvalues_2 = -b-sqrt(delta);  //value of first eigenvalues
+        eigenvalues_2 /= 2;
+        std::complex <double> new_matrix[2][2];
         //value of first eigenvector
         for (int i = 0; i < 2; i++)
             for (int j = 0; j < 2; j++)
                 new_matrix[i][j]=-matrix[i][j]; //xE - A
         new_matrix[0][0] += eigenvalues_1;
         new_matrix[1][1] += eigenvalues_1;
-        double eigenvector_1[2]={1,0};
+        std::complex <double> eigenvector_1[2]={1,0};
         eigenvector_1[1]=-new_matrix[0][1]/new_matrix[0][0];
 
         //value of second eigenvector
@@ -809,13 +811,15 @@ int CMatrix<T>::eigenvalues_vectors()
                 new_matrix[i][j]=-matrix[i][j]; //xE - A
         new_matrix[0][0] += eigenvalues_2;
         new_matrix[1][1] += eigenvalues_2;
-        double eigenvector_2[2]={1,0};
+        std::complex <double> eigenvector_2[2]={1,0};
         eigenvector_2[1]=-new_matrix[0][0]/new_matrix[0][1];
 
-        std::cout<<"First eigenvalue is: "<<eigenvalues_1<<std::endl;
-        std::cout<<"First eigenvector is: "<<std::endl<<eigenvector_1[0]<<std::endl<<eigenvector_1[1]<<std::endl;
-        std::cout<<"Second eigenvalue is: "<<eigenvalues_2<<std::endl;
-        std::cout<<"Second eigenvector is: "<<std::endl<<eigenvector_2[0]<<std::endl<<eigenvector_2[1]<<std::endl;
+        std::cout<<"First eigenvalue is: "<<eigenvalues_1.real()<<"+("<<eigenvalues_1.imag()<<"i)"<<std::endl;
+        std::cout<<"First eigenvector is: "<<std::endl<<eigenvector_1[0].real()<<"+("<<eigenvector_1[0].imag()<<"i)"<<std::endl;
+        std::cout<<eigenvector_1[1].real()<<"+("<<eigenvector_1[1].imag()<<"i)"<<std::endl;
+        std::cout<<"Second eigenvalue is: "<<eigenvalues_2.real()<<" "<<eigenvalues_2.imag()<<"i"<<std::endl;
+        std::cout<<"Second eigenvector is: "<<std::endl<<eigenvector_2[0].real()<<"+("<<eigenvector_2[0].imag()<<"i)"<<std::endl;
+        std::cout<<eigenvector_2[1].real()<<"+("<<eigenvector_2[1].imag()<<"i)"<<std::endl;
     }
     if(len_r==3){
         double a=1,b,c,d=0;    //ax^3+bx^2+cx+d
@@ -831,10 +835,15 @@ int CMatrix<T>::eigenvalues_vectors()
         //y=x-a1/3      y^3+py+q=0
         p = (3*c-b*b)/3;
         q = (27*d-9*b*c+2*b*b*b)/27;
-        double Diata = q*q/4 + p*p*p/27;
-        double  eigenvalue_1 = pow(-q/2+sqrt(Diata),1.0/3)+pow(-q/2-sqrt(Diata),1.0/3)-b/3;  //value of first eigenvalues
-        auto x = std::complex<double>(-4,0);
-        std::cout<<sqrt(x)<<std::endl;
+        std::complex <double> delta = q*q/4 + p*p*p/27;
+        std::complex <double> w = sqrt(-3.0);
+        std::complex <double> eigenvalue_1 = pow(-q/2+sqrt(delta),1.0/3)+pow(-q/2-sqrt(delta),1.0/3)- b/3;  //value of first eigenvalues
+        std::complex <double> eigenvalue_2 = w*pow(-q/2+sqrt(delta),1/3)+(w*w)*pow(-q/2-sqrt(delta),1/3)- b/3;  //value of second eigenvalues
+        std::complex <double> eigenvalue_3 = w*w*pow(-q/2+sqrt(delta),1/3)+w*pow(-q/2-sqrt(delta),1/3)- b/3; //value of third eigenvalues
+        std::cout<<eigenvalue_1<<std::endl;
+        std::cout<<eigenvalue_2<<std::endl;
+        std::cout<<eigenvalue_3<<std::endl;
+        std::cout<<b<<" "<<p<<" "<<q<<" "<<delta<<" "<<w*w<<std::endl;
     } 
     if(len_r==4){
         int a=1,b,c,d,e=0;
