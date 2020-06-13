@@ -56,6 +56,7 @@ public:
     friend T2 det(const CMatrix<T2> &tar); // determinate
     void tranposition();                   // transposition matrix
     void conjugation();                    // conjugation matrix
+    int eigenvalues_vectors();             
     ~CMatrix();
 	void eigen( CMatrix<T>* eigenVector, T* eigenValue, double precision);
 	CMatrix<T> inverse();
@@ -780,5 +781,67 @@ CMatrix<T> CMatrix<T>::convolution(CMatrix<T> kernal) {
 	}
 
 }
+template <typename T>
+int CMatrix<T>::eigenvalues_vectors()
+{
+    if(len_r != len_c)
+        return 0;
+    if(len_r==2){
+        double a=1,b=0,c=0;
+        c = matrix[0][0]*matrix[1][1] - matrix[1][0]*matrix[0][1];
+        b = - matrix[0][0] - matrix[1][1];
+        double eigenvalues_1 = (-b + sqrt(b*b-4*a*c))/2/a;  //value of first eigenvalues
+        double eigenvalues_2 = (-b - sqrt(b*b-4*a*c))/2/a;  //value of second eigenvalues
+        std::cout<<eigenvalues_1<<" "<<eigenvalues_2<<" "<<std::endl;
+        int new_matrix[2][2];
+        //value of first eigenvector
+        for (int i = 0; i < 2; i++)
+            for (int j = 0; j < 2; j++)
+                new_matrix[i][j]=-matrix[i][j]; //xE - A
+        new_matrix[0][0] += eigenvalues_1;
+        new_matrix[1][1] += eigenvalues_1;
+        double eigenvector_1[2]={1,0};
+        eigenvector_1[1]=-new_matrix[0][1]/new_matrix[0][0];
 
+        //value of second eigenvector
+        for (int i = 0; i < 2; i++)
+            for (int j = 0; j < 2; j++)
+                new_matrix[i][j]=-matrix[i][j]; //xE - A
+        new_matrix[0][0] += eigenvalues_2;
+        new_matrix[1][1] += eigenvalues_2;
+        double eigenvector_2[2]={1,0};
+        eigenvector_2[1]=-new_matrix[0][0]/new_matrix[0][1];
+
+        std::cout<<"First eigenvalue is: "<<eigenvalues_1<<std::endl;
+        std::cout<<"First eigenvector is: "<<std::endl<<eigenvector_1[0]<<std::endl<<eigenvector_1[1]<<std::endl;
+        std::cout<<"Second eigenvalue is: "<<eigenvalues_2<<std::endl;
+        std::cout<<"Second eigenvector is: "<<std::endl<<eigenvector_2[0]<<std::endl<<eigenvector_2[1]<<std::endl;
+    }
+    if(len_r==3){
+        double a=1,b,c,d=0;    //ax^3+bx^2+cx+d
+        b = -matrix[2][2]-matrix[0][0]-matrix[1][1];
+        c = matrix[0][0]*matrix[1][1]+matrix[0][0]*matrix[2][2]+matrix[1][1]*matrix[2][2];
+        c += -matrix[0][2]*matrix[2][0]-matrix[1][2]*matrix[2][1]-matrix[0][1]*matrix[1][0];
+        d = -matrix[0][0]*matrix[1][1]*matrix[2][2] - matrix[1][0]*matrix[2][1]*matrix[0][2] - matrix[2][0]*matrix[0][1]*matrix[1][2];
+        d += matrix[0][2]*matrix[1][1]*matrix[2][0] + matrix[0][0]*matrix[1][2]*matrix[2][1] + matrix[0][1]*matrix[1][0]*matrix[2][2];
+        double a1,a2,a3,p,q;   //x^3+a1*x^2+a2*x+a3=0
+        a1 = b/a;
+        a2 = c/a;
+        a3 = d/a;
+        //y=x-a1/3      y^3+py+q=0
+        p = (3*c-b*b)/3;
+        q = (27*d-9*b*c+2*b*b*b)/27;
+        double Diata = q*q/4 + p*p*p/27;
+        double  eigenvalue_1 = pow(-q/2+sqrt(Diata),1.0/3)+pow(-q/2-sqrt(Diata),1.0/3)-b/3;  //value of first eigenvalues
+        auto x = std::complex<double>(-4,0);
+        std::cout<<sqrt(x)<<std::endl;
+    } 
+    if(len_r==4){
+        int a=1,b,c,d,e=0;
+
+        
+    }
+
+    return 0;
+}
 #endif
