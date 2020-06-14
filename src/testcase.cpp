@@ -183,7 +183,6 @@ void testeigenvalues_vectors()
 
 void testMat2CMatrix(){
 	cv::Mat t1 = (cv::Mat_<double>(3,3)<<9,8,7,6,5,4,3,2,1);
-	cout<<t1.at<double>(1,2)<<endl;
 	cout<<"Matrix in opencv:"<<endl<<t1<<endl;
 	CMatrix<double> t2 = Mat2CMatrix<double>(t1);
 	std::cout<<"Matrix in CMatrix:"<<endl;
