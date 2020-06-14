@@ -181,6 +181,23 @@ void testeigenvalues_vectors()
     test1.eigenvalues_vectors();
 }
 
+void testMat2CMatrix(){
+	cv::Mat t1 = (cv::Mat_<double>(3,3)<<9,8,7,6,5,4,3,2,1);
+	cout<<t1.at<double>(1,2)<<endl;
+	cout<<"Matrix in opencv:"<<endl<<t1<<endl;
+	CMatrix<double> t2 = Mat2CMatrix<double>(t1);
+	std::cout<<"Matrix in CMatrix:"<<endl;
+	t2.print();
+}
+
+void testCMatrix2Mat(){
+	cv::Mat t1 = test1.CMatirxr2Mat();
+	std::cout<<"Matrix in CMatrix:"<<endl;
+	test1.print();
+	cout<<"Matrix in opencv:"<<endl<<t1<<endl;
+
+}
+
 void testMatrix()
 {
     // testMatrixAddSub();
@@ -199,6 +216,8 @@ void testMatrix()
 	//testMatrixSlice();
 	//testMatrixConvolution();
     testeigenvalues_vectors();
+	//testMat2CMatrix();
+	//testCMatrix2Mat();
 }
 
 int main()
