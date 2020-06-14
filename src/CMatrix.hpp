@@ -63,6 +63,8 @@ public:
 	CMatrix<T> reshape(int r, int c);
 	CMatrix<T> slice(int r_start, int r_end, int c_start,int c_end);
 	CMatrix<T> convolution(CMatrix<T> kernal);
+	cv::Mat CMatirxr2Mat();
+
 };
 
 template <typename T>
@@ -873,4 +875,34 @@ int CMatrix<T>::eigenvalues_vectors()
     }
     return 0;
 }
+
+
+template<typename T>
+cv::Mat CMatrix<T>::CMatirxr2Mat() {
+	cv::Mat mat(len_r,len_c,CV_8U);
+	for(int i = 0; i < len_r;i++){
+		for(int j = 0; j <len_c;j++){
+			mat.at<uchar>(i,j) = matrix[i][j];
+		}
+	}
+	cv::Mat re = mat.clone();
+
+	return re;
+}
+
+template<typename T>
+CMatrix<T> Mat2CMatrix(cv::Mat mat) {
+	int r = mat.rows;
+	int c = mat.cols;
+	T arr[r*c];
+	for(int i = 0; i < r;i++){
+		for(int j = 0; j < c;j++){
+			arr[i*c+j] =(mat.at<T>(i,j));
+		}
+	}
+	CMatrix<T> re(r,c,arr);
+	return re;
+
+}
+
 #endif
