@@ -154,14 +154,36 @@ void testMatrixSlice(){
 	test2.print();
 }
 
-void testMatrixConvolution(){
+void testMatrixConvolutionFull(){
 	double pic[12] = {1,2,3,4,5,6,7,8,9,8,7,6};
 	double ker[9] = {1,2,3,-1,0,1,2,1,2};
 	CMatrix<double> picture(3,4,pic);
 	CMatrix<double> kernal(3,3,ker);
 	picture.print();
 	kernal.print();
-	CMatrix<double> ans = picture.convolution(kernal);
+	CMatrix<double> ans = picture.convolution(kernal,"full");
+	ans.print();
+
+}
+void testMatrixConvolutionSame(){
+	double pic[12] = {1,2,3,4,5,6,7,8,9,8,7,6};
+	double ker[9] = {1,2,3,-1,0,1,2,1,2};
+	CMatrix<double> picture(3,4,pic);
+	CMatrix<double> kernal(3,3,ker);
+	picture.print();
+	kernal.print();
+	CMatrix<double> ans = picture.convolution(kernal,"same");
+	ans.print();
+
+}
+void testMatrixConvolutionValid(){
+	double pic[12] = {1,2,3,4,5,6,7,8,9,8,7,6};
+	double ker[9] = {1,2,3,-1,0,1,2,1,2};
+	CMatrix<double> picture(3,4,pic);
+	CMatrix<double> kernal(3,3,ker);
+	picture.print();
+	kernal.print();
+	CMatrix<double> ans = picture.convolution(kernal,"valid");
 	ans.print();
 
 }
@@ -217,6 +239,9 @@ void testMatrix()
     testeigenvalues_vectors();
 	//testMat2CMatrix();
 	//testCMatrix2Mat();
+	//testMatrixConvolutionFull();
+	//testMatrixConvolutionSame();
+	//testMatrixConvolutionValid();
 }
 
 int main()
