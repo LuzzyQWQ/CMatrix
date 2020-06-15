@@ -4,6 +4,7 @@
 #include <vector>
 #include <complex>
 #include <typeinfo>
+#include <cstring>
 #include "Cvector.hpp"
 #include "Cexception.hpp"
 // conjugation
@@ -62,7 +63,7 @@ public:
 	CMatrix<T> inverse();
 	CMatrix<T> reshape(int r, int c);
 	CMatrix<T> slice(int r_start, int r_end, int c_start,int c_end);
-	CMatrix<T> convolution(CMatrix<T> kernal);
+	CMatrix<T> convolution(CMatrix<T> kernal,std::string type);
 	cv::Mat CMatirxr2Mat();
 
 };
@@ -737,14 +738,30 @@ CMatrix<T> CMatrix<T>::slice(int r_start, int r_end, int c_start,int c_end) {
 }
 
 template<typename T>
-CMatrix<T> CMatrix<T>::convolution(CMatrix<T> kernal) {
+CMatrix<T> CMatrix<T>::convolution(CMatrix<T> kernal,std::string type) {
 	try{
+		if((type== "valid" &&(len_r<kernal.len_r || len_c<kernal.len_c))
+			|| (type == "same" && (kernal.len_r%2!=1 || kernal.len_c%2!=1))) throw InvalidException();
 		int rkernal = kernal.len_r;
 		int ckernal = kernal.len_c;
-		int rmat = this->len_r+2*(rkernal-1);
-		int cmat = this->len_c+2*(rkernal-1);
-		int rans = rmat-rkernal+1;
-		int cans = cmat-ckernal+1;
+
+		int rans,cans,rmat,cmat;
+		if(type=="full") {
+			rmat = len_r+2*(rkernal-1);
+			cmat = len_c+2*(rkernal-1);
+			rans = rmat - rkernal + 1;
+			cans = cmat - ckernal + 1;
+		}else if(type == "valid") {
+			rmat = len_r;
+			cmat = len_c;
+			rans = len_r - kernal.len_r + 1;
+			cans = len_c - kernal.len_c + 1;
+		}else if(type == "same") {
+			rmat = len_r+2*(rkernal/2);
+			cmat = len_c+2*(rkernal/2);
+			rans = len_r;
+			cans = len_c;
+		}else throw InvalidException();
 		T ans[rans*cans];
 		std::vector<std::vector<T>> m; // pad 0 to the original mat
 		for (int i = 0; i < rmat; i++)
@@ -756,10 +773,23 @@ CMatrix<T> CMatrix<T>::convolution(CMatrix<T> kernal) {
 			}
 			m.push_back(tmp);
 		}
-		for(int i = 0;i < this->len_r;i++){
-			for (int j = 0; j < this->len_c; j++)
-			{
-				m[i+rkernal-1][j+ckernal-1] = this->matrix[i][j];
+		if(type=="full") {
+			for (int i = 0; i < len_r; i++) {
+				for (int j = 0; j < len_c; j++) {
+					m[i + rkernal - 1][j + ckernal - 1] = matrix[i][j];
+				}
+			}
+		}else if(type=="same"){
+			for (int i = 0; i < len_r; i++) {
+				for (int j = 0; j < len_c; j++) {
+					m[i + rkernal / 2][j + ckernal / 2] = matrix[i][j];
+				}
+			}
+		}else{
+			for (int i = 0; i < len_r; i++) {
+				for (int j = 0; j < len_c; j++) {
+					m[i][j] = matrix[i][j];
+				}
 			}
 		}
 
