@@ -5,6 +5,7 @@
 #include <complex>
 #include <typeinfo>
 #include <cstring>
+#include "opencv2/opencv.hpp"
 #include "Cvector.hpp"
 #include "Cexception.hpp"
 // conjugation
