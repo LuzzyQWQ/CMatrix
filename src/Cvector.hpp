@@ -16,6 +16,7 @@ private:
     std::vector<T> vec;
 
 public:
+    Cvector();                     // Init a 1 size vector as (1,1...,1)
     Cvector(int n);                     // Init a n size vector as (1,1...,1)
     Cvector(const std::vector<T> &tar); // Init with a vector
     Cvector(const Cvector<T> &tar);     // Init with a Cvector
@@ -38,6 +39,11 @@ public:
     ~Cvector();
 };
 template <typename T>
+Cvector<T>::Cvector()
+{   
+    vec.push_back(1);
+}
+template <typename T>
 Cvector<T>::Cvector(int n)
 {
     for (int i = 0; i < n; i++)
@@ -45,7 +51,6 @@ Cvector<T>::Cvector(int n)
         vec.push_back(1);
     }
 }
-
 template <typename T>
 Cvector<T>::Cvector(const std::vector<T> &tar)
 {
@@ -262,7 +267,7 @@ Cvector<T> Cvector<T>::el_mult(const Cvector<T> &tar)
     catch (UnalignException &e)
     {
         std::cerr << e.what() << '\n';
-        return T(-1);
+        return Cvector<T>(0);
     }
 }
 template <typename T>
