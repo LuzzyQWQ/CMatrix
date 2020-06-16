@@ -11,7 +11,54 @@ Cvector<complex<double>> cVec[2];
 
 CMatrix<double> dMat[2];
 CMatrix<complex<double>> cMat[2];
-int typeIdx;
+int typeIdx; // 类型下标
+
+//print部分
+void printcVec(int num);
+void printcMat(int num);
+void printdVec(int num);
+void printdMat(int num);
+
+// 输入部分
+void InputComplexVector(int num);
+void InputComplexMatrix(int num);
+void InputDoubleVector(int num);
+void InputDoubleMatrix(int num);
+
+// Vector 操作部分
+void testVectorAdd();
+void testVectorMinus();
+void testVectorSMultple();
+void testVectorSDivide();
+void testVectorEleMultple();
+void testVectorDot();
+void testVectorCross();
+
+// Matrix 基础操作部分
+void testMatrixAdd();
+void testMatrixMinus();
+void testMatrixSMultple();
+void testMatrixSDivide();
+void testMatEleMultple();
+void testMatTranpos();
+void testMatConjug();
+void testMatMat();
+void testMatVec();
+
+// Matrix 进阶操作部分
+void testMatMax();
+void testMatMin();
+void testMatSum();
+void testMatAvg();
+void testMatEigenValue();
+void testMatEigenVector();
+void testMatInverse();
+void testMatDet();
+void testMatReshape();
+void testMatSlice();
+
+// 菜单部分
+void ChooseType(int num,bool isVec);
 void commandVector(int idx);
 void commandMatrixBasic(int idx);
 void commandMatrixAdv(int idx);

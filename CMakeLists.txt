@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.0.0)
 project(Matrix VERSION 0.1.0)
 
-# set(OpenCV_DIR D:\\Tools\\OpenCV\\opencv\\build)
+set(OpenCV_DIR D:\\Tools\\OpenCV\\opencv\\build)
 FIND_PACKAGE(OpenCV REQUIRED)
 message(STATUS "OpenCV library status:")
 message(STATUS "    version: ${OpenCV_VERSION}")
