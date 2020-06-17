@@ -579,13 +579,13 @@ void testMatEigenValue()
     if (typeIdx == 1)
     {
         printdMat(1);
-        //TODO
+        dMat[0].eigenvalues_vectors();
         // print eigenValue
     }
     else
     {
         printcMat(1);
-        //TODO
+        dMat[0].eigenvalues_vectors();
         // print eigenValue
     }
 }
@@ -596,13 +596,13 @@ void testMatEigenVector()
     if (typeIdx == 1)
     {
         printdMat(1);
-        //TODO
+        dMat[0].eigenvalues_vectors();
         // print eigenVector
     }
     else
     {
         printcMat(1);
-        //TODO
+        dMat[0].eigenvalues_vectors();
         // print eigenVector
     }
 }
