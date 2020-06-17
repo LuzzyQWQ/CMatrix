@@ -84,7 +84,7 @@ void printcMat(int num)
 {
     for (int i = 0; i < num; i++)
     {
-        cout << "Mat" << i + 1 << ": ";
+        cout << "Mat" << i + 1 << ": "<<endl;
         cMat[i].print();
     }
 }
@@ -92,7 +92,7 @@ void printdMat(int num)
 {
     for (int i = 0; i < num; i++)
     {
-        cout << "Mat" << i + 1 << ": ";
+        cout << "Mat" << i + 1 << ": "<<endl;
         dMat[i].print();
     }
 }
@@ -101,7 +101,7 @@ void printdMat(int num)
 void InputComplexVector(int num)
 {
     int size;
-    complex<double> ct;
+    double re,im;
     vector<complex<double>> ctmp;
     cout << " Vector " << num << ":" << endl;
     cout << "Please input size:";
@@ -109,8 +109,8 @@ void InputComplexVector(int num)
     cout << "Please input element:";
     for (int i = 0; i < size; i++)
     {
-        cin >> ct;
-        ctmp.push_back(ct);
+        cin >> re>>im;
+        ctmp.push_back(complex<double>(re,im));
     }
     Cvector<complex<double>> t(ctmp);
     cVec[num - 1] = t;
@@ -118,7 +118,7 @@ void InputComplexVector(int num)
 void InputComplexMatrix(int num)
 {
     int row, column;
-    complex<double> ct;
+    double re,im;
     vector<complex<double>> ctmp;
     cout << " Matrix " << num << ":" << endl;
     cout << "Please input row:";
@@ -128,8 +128,8 @@ void InputComplexMatrix(int num)
     cout << "Please input element:";
     for (int i = 0; i < row * column; i++)
     {
-        cin >> ct;
-        ctmp.push_back(ct);
+        cin >> re>>im;
+        ctmp.push_back(complex<double>(re,im));
     }
     CMatrix<complex<double>> t(row, column, ctmp);
     cMat[num - 1] = t;
@@ -688,56 +688,67 @@ void displayMenu()
     cin >> tmp;
     if (tmp == 1)
     {
-        cout << "--------------Vector Command Menu--------------" << endl;
-        cout << "   1. PLUS" << endl;
-        cout << "   2. MINUS" << endl;
-        cout << "   3. Scaler Multiple" << endl;
-        cout << "   4. Scaler Divide" << endl;
-        cout << "   5. Element-wise Multiple" << endl;
-        cout << "   6. Dot Mult" << endl;
-        cout << "   7. Cross Mult" << endl;
-        cout << "   0. Back to Main Menu" << endl;
-        cout << "-----------------------------------------------" << endl;
-        cout << "Please input operation index: ";
-        cin >> index;
-        commandVector(index);
+        while (true)
+        {
+            cout << "--------------Vector Command Menu--------------" << endl;
+            cout << "   1. PLUS" << endl;
+            cout << "   2. MINUS" << endl;
+            cout << "   3. Scaler Multiple" << endl;
+            cout << "   4. Scaler Divide" << endl;
+            cout << "   5. Element-wise Multiple" << endl;
+            cout << "   6. Dot Mult" << endl;
+            cout << "   7. Cross Mult" << endl;
+            cout << "   0. Back to Main Menu" << endl;
+            cout << "-----------------------------------------------" << endl;
+            cout << "Please input operation index: ";
+            cin >> index;
+            commandVector(index);
+        }
+        
     }
     else if (tmp == 2)
     {
-        cout << "---------------Matrix Basic Menu--------------" << endl;
-        cout << "   1. PLUS" << endl;
-        cout << "   2. MINUS" << endl;
-        cout << "   3. Scaler Multiple" << endl;
-        cout << "   4. Scaler Divide" << endl;
-        cout << "   5. Element-wise Multiple" << endl;
-        cout << "   6. Tranposition" << endl;
-        cout << "   7. Conjugation" << endl;
-        cout << "   8. Matrix Multiple" << endl;
-        cout << "   9. Matrix-Vector Multiple" << endl;
-        cout << "   0. Back to Main Menu" << endl;
-        cout << "-----------------------------------------------" << endl;
-        cout << "Please input operation index: ";
-        cin >> index;
-        commandMatrixBasic(index);
+        while(true)
+        {
+            cout << "---------------Matrix Basic Menu--------------" << endl;
+            cout << "   1. PLUS" << endl;
+            cout << "   2. MINUS" << endl;
+            cout << "   3. Scaler Multiple" << endl;
+            cout << "   4. Scaler Divide" << endl;
+            cout << "   5. Element-wise Multiple" << endl;
+            cout << "   6. Tranposition" << endl;
+            cout << "   7. Conjugation" << endl;
+            cout << "   8. Matrix Multiple" << endl;
+            cout << "   9. Matrix-Vector Multiple" << endl;
+            cout << "   0. Back to Main Menu" << endl;
+            cout << "-----------------------------------------------" << endl;
+            cout << "Please input operation index: ";
+            cin >> index;
+            commandMatrixBasic(index);
+        }
     }
-    else if (tmp == 2)
+    else if (tmp == 3)
     {
-        cout << "-------------Matrix Advanced Menu--------------" << endl;
-        cout << "   1. Find MAX" << endl;
-        cout << "   2. Find MIN" << endl;
-        cout << "   3. Sum Up" << endl;
-        cout << "   4. Average" << endl;
-        cout << "   5. Eigen Value" << endl;
-        cout << "   6. Eigen Vector" << endl;
-        cout << "   7. Inverse " << endl;
-        cout << "   8. Determinant" << endl;
-        cout << "   9. Reshape" << endl;
-        cout << "   10. Slicing" << endl;
-        cout << "   0. Back to Main Menu" << endl;
-        cout << "-----------------------------------------------" << endl;
-        cout << "Please input operation index: ";
-        cin >> index;
-        commandMatrixAdv(index);
+        while(true)
+        {
+            cout << "-------------Matrix Advanced Menu--------------" << endl;
+            cout << "   1. Find MAX" << endl;
+            cout << "   2. Find MIN" << endl;
+            cout << "   3. Sum Up" << endl;
+            cout << "   4. Average" << endl;
+            cout << "   5. Eigen Value" << endl;
+            cout << "   6. Eigen Vector" << endl;
+            cout << "   7. Inverse " << endl;
+            cout << "   8. Determinant" << endl;
+            cout << "   9. Reshape" << endl;
+            cout << "   10. Slicing" << endl;
+            cout << "   0. Back to Main Menu" << endl;
+            cout << "-----------------------------------------------" << endl;
+            cout << "Please input operation index: ";
+            cin >> index;
+            commandMatrixAdv(index);
+        }
+
     }
     else
     {
