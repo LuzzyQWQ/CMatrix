@@ -58,7 +58,7 @@ void testMatReshape();
 void testMatSlice();
 
 // 菜单部分
-void ChooseType(int num,bool isVec);
+void ChooseType(int num, bool isVec);
 void commandVector(int idx);
 void commandMatrixBasic(int idx);
 void commandMatrixAdv(int idx);
@@ -84,7 +84,7 @@ void printcMat(int num)
 {
     for (int i = 0; i < num; i++)
     {
-        cout << "Mat" << i + 1 << ": "<<endl;
+        cout << "Mat" << i + 1 << ": " << endl;
         cMat[i].print();
     }
 }
@@ -92,7 +92,7 @@ void printdMat(int num)
 {
     for (int i = 0; i < num; i++)
     {
-        cout << "Mat" << i + 1 << ": "<<endl;
+        cout << "Mat" << i + 1 << ": " << endl;
         dMat[i].print();
     }
 }
@@ -101,7 +101,7 @@ void printdMat(int num)
 void InputComplexVector(int num)
 {
     int size;
-    double re,im;
+    double re, im;
     vector<complex<double>> ctmp;
     cout << " Vector " << num << ":" << endl;
     cout << "Please input size:";
@@ -109,8 +109,8 @@ void InputComplexVector(int num)
     cout << "Please input element:";
     for (int i = 0; i < size; i++)
     {
-        cin >> re>>im;
-        ctmp.push_back(complex<double>(re,im));
+        cin >> re >> im;
+        ctmp.push_back(complex<double>(re, im));
     }
     Cvector<complex<double>> t(ctmp);
     cVec[num - 1] = t;
@@ -118,7 +118,7 @@ void InputComplexVector(int num)
 void InputComplexMatrix(int num)
 {
     int row, column;
-    double re,im;
+    double re, im;
     vector<complex<double>> ctmp;
     cout << " Matrix " << num << ":" << endl;
     cout << "Please input row:";
@@ -128,8 +128,8 @@ void InputComplexMatrix(int num)
     cout << "Please input element:";
     for (int i = 0; i < row * column; i++)
     {
-        cin >> re>>im;
-        ctmp.push_back(complex<double>(re,im));
+        cin >> re >> im;
+        ctmp.push_back(complex<double>(re, im));
     }
     CMatrix<complex<double>> t(row, column, ctmp);
     cMat[num - 1] = t;
@@ -575,14 +575,12 @@ void testMatEigenValue()
     if (typeIdx == 1)
     {
         printdMat(1);
-        //TODO
-        // print eigenValue
+        dMat[0].eigenvalues_vectors();
     }
     else
     {
         printcMat(1);
-        //TODO
-        // print eigenValue
+        dMat[0].eigenvalues_vectors();
     }
 }
 void testMatEigenVector()
@@ -592,13 +590,13 @@ void testMatEigenVector()
     if (typeIdx == 1)
     {
         printdMat(1);
-        //TODO
+        dMat[0].eigenvalues_vectors();
         // print eigenVector
     }
     else
     {
         printcMat(1);
-        //TODO
+        dMat[0].eigenvalues_vectors();
         // print eigenVector
     }
 }
@@ -703,12 +701,16 @@ void displayMenu()
             cout << "Please input operation index: ";
             cin >> index;
             commandVector(index);
+            cout << "Continue Operation?(y/n):";
+            char tmp;
+            cin >> tmp;
+            if (tmp != 'y')
+                return;
         }
-        
     }
     else if (tmp == 2)
     {
-        while(true)
+        while (true)
         {
             cout << "---------------Matrix Basic Menu--------------" << endl;
             cout << "   1. PLUS" << endl;
@@ -725,11 +727,16 @@ void displayMenu()
             cout << "Please input operation index: ";
             cin >> index;
             commandMatrixBasic(index);
+            cout << "Continue Operation?(y/n):";
+            char tmp;
+            cin >> tmp;
+            if (tmp != 'y')
+                return;
         }
     }
     else if (tmp == 3)
     {
-        while(true)
+        while (true)
         {
             cout << "-------------Matrix Advanced Menu--------------" << endl;
             cout << "   1. Find MAX" << endl;
@@ -747,8 +754,12 @@ void displayMenu()
             cout << "Please input operation index: ";
             cin >> index;
             commandMatrixAdv(index);
+            cout << "Continue Operation?(y/n):";
+            char tmp;
+            cin >> tmp;
+            if (tmp != 'y')
+                return;
         }
-
     }
     else
     {
