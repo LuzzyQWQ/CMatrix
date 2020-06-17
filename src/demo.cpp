@@ -594,13 +594,13 @@ void testMatEigenVector()
     if (typeIdx == 1)
     {
         printdMat(1);
-        dMat[0].eigenvalues_vectors();
+        //TODO
         // print eigenVector
     }
     else
     {
         printcMat(1);
-        dMat[0].eigenvalues_vectors();
+        //TODO
         // print eigenVector
     }
 }
@@ -676,9 +676,7 @@ void testMatSlice()
 }
 
 void testMat2CMatrix(){
-    //ChooseType(1,false);
     cout << "------------opencv Mat to CMatrix-------------" << endl;
-    //cv::Mat t1 = (cv::Mat_<double>(3,3)<<9,8,7,6,5,4,3,2,1);
     int r,c;
     cout << "Please input row number: ";
     cin>>r;
@@ -723,6 +721,51 @@ void testCMatrix2Mat(){
     cout<<"Matrix in opencv:"<<endl<<t1<<endl;
 
 }
+
+void testMatrixConvolution(){
+    cout << "------------Full convolution-------------" << endl;
+    int rm,cm,rk,ck;
+    int type;
+    cout<<"Please input matrix row number:";
+    cin>>rm;
+    cout<<"Please input matrix column number:";
+    cin>>cm;
+    cout<<"Please input kernal row number:";
+    cin>>rk;
+    cout<<"Please input kernal colum number:";
+    cin>>ck;
+    cout<<"Please choose convolution type:"<<endl;
+    cout<<"1.full"<<endl;
+    cout<<"2.same"<<endl;
+    cout<<"3.valid"<<endl;
+    cin>>type;
+    double pic[rm*cm] ;
+    double ker[rk*ck] ;
+    cout<<"Please input matrix element:"<<endl;
+    for(int i = 0; i < rm; i++){
+        for(int j = 0; j < cm;j++){
+            cin>>pic[i*cm+j];
+        }
+    }
+    cout<<"Please input kernal element:"<<endl;
+    for(int i = 0; i < rk; i++){
+        for(int j = 0; j < ck;j++){
+            cin>>ker[i*ck+j];
+        }
+    }
+    CMatrix<double> picture(rm,cm,pic);
+    CMatrix<double> kernal(rk,ck,ker);
+    picture.print();
+    kernal.print();
+    CMatrix<double> ans;
+    if(type==1) ans = picture.convolution(kernal,"full");
+    else if(type==2) ans = picture.convolution(kernal,"same");
+    else if(type == 3) ans = picture.convolution(kernal,"valid");
+    else cout<<"invalid type"<<endl;
+    ans.print();
+
+}
+
 
 int main()
 {
@@ -935,6 +978,9 @@ void commandMatrixAdv(int idx)
         break;
     case 12:
         testMat2CMatrix();
+        break;
+    case 13:
+        testMatrixConvolution();
         break;
     case 0:
         displayMenu();
