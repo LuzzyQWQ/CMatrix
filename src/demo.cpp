@@ -56,6 +56,8 @@ void testMatInverse();
 void testMatDet();
 void testMatReshape();
 void testMatSlice();
+void testMat2CMatrix();
+void testCMatrix2Mat();
 
 // 菜单部分
 void ChooseType(int num, bool isVec);
@@ -265,6 +267,8 @@ void testVectorSMultple()
         (s * cVec[0]).print();
     }
 }
+
+
 void testVectorSDivide()
 {
     ChooseType(1, true);
@@ -670,6 +674,56 @@ void testMatSlice()
         cMat[0].slice(rs, re, cs, ce).print();
     }
 }
+
+void testMat2CMatrix(){
+    //ChooseType(1,false);
+    cout << "------------opencv Mat to CMatrix-------------" << endl;
+    //cv::Mat t1 = (cv::Mat_<double>(3,3)<<9,8,7,6,5,4,3,2,1);
+    int r,c;
+    cout << "Please input row number: ";
+    cin>>r;
+    cout << "Please input column number: ";
+    cin>>c;
+    cv::Mat t1 ;
+    t1.create(r,c,CV_8UC1);
+    //double arr[r*c];
+    double temp;
+    cout << "Please input matrix elements: "<<endl;
+    for(int i = 0; i < r;i++){
+        for(int j = 0; j < c;j++){
+            cin>>temp;
+            t1.at<uchar>(i,j)=temp;
+        }
+    }
+
+    cout<<"Matrix in opencv:"<<endl<<t1<<endl;
+    CMatrix<double> t2 = Mat2CMatrix<double>(t1);
+    std::cout<<"Matrix in CMatrix:"<<endl;
+    t2.print();
+}
+
+void testCMatrix2Mat(){
+    cout << "------------CMatrix to opencv Mat-------------" << endl;
+    int r,c;
+    cout << "Please input row number: ";
+    cin>>r;
+    cout << "Please input column number: ";
+    cin>>c;
+    double arr[r*c];
+    cout << "Please input matrix elements: "<<endl;
+    for(int i = 0; i < r;i++){
+        for(int j = 0; j < c;j++){
+            cin>>arr[i*c+j];
+        }
+    }
+    CMatrix<double> test1(r, c, arr);
+    cv::Mat t1 = test1.CMatirxr2Mat();
+    std::cout<<"Matrix in CMatrix:"<<endl;
+    test1.print();
+    cout<<"Matrix in opencv:"<<endl<<t1<<endl;
+
+}
+
 int main()
 {
     displayMenu();
@@ -875,6 +929,12 @@ void commandMatrixAdv(int idx)
         break;
     case 10:
         testMatSlice();
+        break;
+    case 11:
+        testCMatrix2Mat();
+        break;
+    case 12:
+        testMat2CMatrix();
         break;
     case 0:
         displayMenu();
