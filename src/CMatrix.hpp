@@ -1064,7 +1064,7 @@ CMatrix<T> Mat2CMatrix(cv::Mat mat)
     {
         for (int j = 0; j < c; j++)
         {
-            arr[i * c + j] = (mat.at<T>(i, j));
+            arr[i * c + j] = (mat.at<uchar>(i, j));
         }
     }
     CMatrix<T> re(r, c, arr);
